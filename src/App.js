@@ -1,23 +1,74 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+
+
 
 function App() {
+
+  const [text, setText] = useState('');
+  const [arr, setArr] = useState([]);
+  const [blur, setBlur] = useState(false);
+
+
+
+
+  const handleBlur = () => {
+  setBlur(true) 
+  }
+
+
+  const hadleChangeText = (e) => {
+    setText(e.target.value)
+  };
+
+  const handleDelete = (i) => {
+      const filtred = arr.filter((item,index) => {
+        if(index === i) {
+          return false
+        }
+        return true
+      })
+      setArr(filtred)
+  }
+
+
+
+
+
+  const doMap = arr.map((item, index) => {
+    return (
+      <div className="item-text">
+        {item.text}
+        <button onClick={() => handleDelete(index)}>x</button>
+        </div>
+        
+    )
+  })
+
+
+  const handleSumbit = (e) => {
+    e.preventDefault();
+    setArr([
+      ...arr,
+      { text }])
+    setText('')
+    
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="wrapper" >
+     
+      <form  onSubmit={handleSumbit} className="block-form" >
+
+
+        <input  value={text} onBlur = {handleBlur} onChange={hadleChangeText}
+         className= "input-text"  type="text" />
+        <button disabled = {!text}  className="add-text">Отправить</button>
+      </form>
+      {blur && !text  ? <p><i>Поле не должно пустым</i></p> : null }
+      { <span>{doMap}</span>}
+
+    
+
     </div>
   );
 }
